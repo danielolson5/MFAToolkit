@@ -9,6 +9,8 @@ endif
 CWD= $(shell pwd)
 # CC
 CC = g++
+# GCC
+GCC = gcc
 # LIBS
 GLPKLIB = -lglpk
 LIBS = -lpthread -lz ${GLPKLIB}
@@ -27,14 +29,19 @@ CPLEXAPI = CPLEXapiEMPTY.cpp
 SRCDIR=${CWD}/src
 
 SRCFILES = ${SRCDIR}/driver.cpp ${SRCDIR}/MFAProblem.cpp ${SRCDIR}/${CPLEXAPI} ${SRCDIR}/SCIPapi.cpp ${SRCDIR}/GLPKapi.cpp ${SRCDIR}/LINDOapiEMPTY.cpp ${SRCDIR}/SolverInterface.cpp ${SRCDIR}/Species.cpp ${SRCDIR}/Data.cpp ${SRCDIR}/InterfaceFunctions.cpp ${SRCDIR}/Identity.cpp ${SRCDIR}/Reaction.cpp ${SRCDIR}/GlobalFunctions.cpp ${SRCDIR}/AtomCPP.cpp ${SRCDIR}/UtilityFunctions.cpp ${SRCDIR}/AtomType.cpp ${SRCDIR}/Gene.cpp ${SRCDIR}/GeneInterval.cpp ${SRCDIR}/stringDB.cpp
+CSRCFILES = ${SRCDIR}/lpx.c
 OBJFILES = $(SRCFILES:.cpp=.o)
+COBJFILES = $(CSRCFILES:.c=.o)
 
-mfatoolkit: $(OBJFILES)
+mfatoolkit: $(COBJFILES) $(OBJFILES)
 	if [ ! -d bin ]; then mkdir bin; fi
 	${CC} ${CCFLAGS} -o bin/mfatoolkit $(^) ${LDFLAGS}
 
 %.o: %.cpp
 	${CC} ${CCFLAGS} -c $<; mv *.o ${SRCDIR}
+
+%.o: %.c
+	${GCC} ${CCFLAGS} -c $<; mv *.o ${SRCDIR}
 
 deploy-mfatoolkit:
 	if [ ! -d ${TARGET}/etc/MFAToolkit ]; then mkdir -p ${TARGET}/etc/MFAToolkit; fi

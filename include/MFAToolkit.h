@@ -73,6 +73,7 @@ using std::pair;
 #include "MFAProblem.h"
 #include "SolverInterface.h"
 #include "GLPKapi.h"
+#include "lpx.h"
 #include "CPLEXapi.h"
 #include "LINDOapi.h"
 #include "SCIPapi.h"
